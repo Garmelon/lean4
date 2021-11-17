@@ -16,12 +16,10 @@ def throwServerError (err : String) : IO α :=
 
 namespace FS.Stream
 
-/-- Chains two streams by creating a new stream s.t. writing to it
-just writes to `a` but reading from it also duplicates the read output
-into `b`, c.f. `a | tee b` on Unix.
-NB: if `a` is written to but this stream is never read from,
-the output will *not* be duplicated. Use this if you only care
-about the data that was actually read. -/
+/-- Create a new stream wrapping `a` whose output is duplicated and written to
+`b`, similar to `a | tee b` on Unix.
+NB: The output is written to `b` whenever it is read from `a`. If `a` is written
+to but this stream is never read from, the output will *not* be duplicated. -/
 def chainRight (a : Stream) (b : Stream) (flushEagerly : Bool := false) : Stream :=
   { a with
     flush := a.flush *> b.flush
@@ -36,7 +34,8 @@ def chainRight (a : Stream) (b : Stream) (flushEagerly : Bool := false) : Stream
       if flushEagerly then b.flush
       pure ln }
 
-/-- Like `tee a | b` on Unix. See `chainOut`. -/
+/-- Create a new stream wrapping `b` whose input is duplicated to `a`, similar
+to `tee a | b` on Unix. -/
 def chainLeft (a : Stream) (b : Stream) (flushEagerly : Bool := false) : Stream :=
   { b with
     flush := a.flush *> b.flush
