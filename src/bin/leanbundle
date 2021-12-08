@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# A small script that bundles a bunch of .ilean files into an .ilean-bundle
+# file.  Since .ilean-bundle files are just json arrays of .ilean files, this
+# script doesn't need to parse json. Instead, it can just concatenate the
+# files, taking care to join them correctly.
+
+set -eo pipefail
+
+if [[ $# -eq 0 ]]; then
+	echo "USAGE"
+	echo "  $0 <ilean bundle file> <ilean files>"
+	echo
+	echo "EXAMPLE"
+	echo "  $0 all.ilean-bundle Foo.ilean Bar.ilean"
+	exit 1
+fi
+
+BUNDLE_FILE="$1"
+FILES=("${@:2}")
+FILES_AMOUNT="${#FILES[@]}"
+
+echo '{"version": 1, "files": [' > "$BUNDLE_FILE"
+
+if [[ $FILES_AMOUNT -eq 1 ]]; then
+	cat < "${FILES[0]}" >> "$BUNDLE_FILE"
+elif [[ $FILES_AMOUNT -gt 1 ]]; then
+	cat < "${FILES[0]}" >> "$BUNDLE_FILE"
+	for file in "${FILES[@]:1}"; do
+		echo ',' >> "$BUNDLE_FILE"
+		cat < "$file" >> "$BUNDLE_FILE"
+	done
+fi
+
+echo ']}' >> "$BUNDLE_FILE"
