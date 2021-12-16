@@ -4,7 +4,7 @@ import Lean.Data.Lsp
 import Lean.Server.InfoUtils
 import Lean.Server.Snapshots
 
-namespace Lean.Server.References
+namespace Lean.Server
 open Std
 open Lsp
 open Elab
@@ -104,8 +104,6 @@ def addRef (self : FileRefMap) (ref : Reference) : FileRefMap :=
 
 end FileRefMap
 
-def RefMap := HashMap String FileRefMap
-
 /-- Content of individual `.ilean` files -/
 structure Ilean where
   version : Nat := 1
@@ -181,4 +179,34 @@ def findFileRefs (text : FileMap) (trees : List InfoTree) (localVars : Bool := t
       | _ => true
   refs.foldl (init := HashMap.empty) fun m ref => m.addRef ref
 
-end Lean.Server.References
+/- Collecting and maintaining reference info from different sources -/
+
+structure References where
+  /-- Includes the bundle file paths so entire bundles can be re- or unloaded -/
+  bundles : HashMap Name (System.FilePath × FileRefMap)
+  /-- Replaces the corresponding entries in `bundles` -/
+  overlay : HashMap Name FileRefMap
+
+namespace References
+
+def empty : References := { bundles := HashMap.empty, overlay := HashMap.empty }
+
+def addBundle (self : References) (path : System.FilePath) (bundle : IleanBundle) : References :=
+  bundle.files.foldl (init := self) fun self file =>
+    { self with bundles := self.bundles.insert file.module (path, file.references) }
+
+def removeBundle (self : References) (path : System.FilePath) : References :=
+  let namesToRemove := self.bundles.toList.filter (fun (_, p, _) => p == path)
+    |>.map (fun (n, _, _) => n)
+  namesToRemove.foldl (init := self) fun self name =>
+    { self with bundles := self.bundles.erase name }
+
+def addOverlay (self : References) (name : Name) (map : FileRefMap) : References :=
+  { self with overlay := self.overlay.insert name map }
+
+def removeOverlay (self : References) (name : Name) : References :=
+  { self with overlay := self.overlay.erase name }
+
+end References
+
+end Lean.Server
