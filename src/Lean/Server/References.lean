@@ -1,3 +1,4 @@
+import Init.System.IO
 import Lean.Data.Json
 import Lean.Data.Lsp
 
@@ -5,6 +6,7 @@ import Lean.Server.InfoUtils
 import Lean.Server.Snapshots
 
 namespace Lean.Server
+open IO
 open Std
 open Lsp
 open Elab
@@ -115,6 +117,16 @@ structure IleanBundle where
   version : Nat := 1
   files : Array Ilean
   deriving FromJson, ToJson
+
+namespace IleanBundle
+
+def load (path : System.FilePath) : IO IleanBundle := do
+  let content ← FS.readFile path
+  match Json.parse content >>= fromJson? with
+    | Except.ok bundle => pure bundle
+    | Except.error msg => throwServerError s!"Failed to load bundle at {path}: {msg}"
+
+end IleanBundle
 
 /- Collecting and deduplicating definitions and usages -/
 
