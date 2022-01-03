@@ -12,6 +12,7 @@ endif
 
 LEAN = lean
 LEANC = leanc
+LEANBUNDLE = leanbundle
 LEAN_AR = ar
 OUT = build
 OLEAN_OUT = $(OUT)
@@ -21,6 +22,7 @@ BIN_OUT = $(OUT)/bin
 LIB_OUT = $(OUT)/lib
 BIN_NAME = $(PKG)
 STATIC_LIB_NAME = lib$(PKG).a
+ILEAN_BUNDLE_NAME = $(PKG).ilean-bundle
 LEAN_OPTS = @LEAN_EXTRA_MAKE_OPTS@
 LEANC_OPTS = -O3 -DNDEBUG
 LINK_OPTS =
@@ -32,13 +34,17 @@ OBJS = $(addprefix $(OLEAN_OUT)/, $(SRCS:.lean=.olean))
 
 SHELL = /usr/bin/env bash -euo pipefail
 
-.PHONY: all bin lib depends clean
+.PHONY: all bin lib ilean-bundle depends clean
 
 all: $(OBJS)
 
 bin: $(BIN_OUT)/$(BIN_NAME)
 
 lib: $(LIB_OUT)/$(STATIC_LIB_NAME)
+
+ifndef C_ONLY
+ilean-bundle: $(OLEAN_OUT)/$(ILEAN_BUNDLE_NAME)
+endif
 
 depends: $(DEPS)
 
@@ -58,9 +64,12 @@ ifdef CMAKE_LIKE_OUTPUT
 	@echo "[    ] Building $<"
 endif
 	@mkdir -p $(OLEAN_OUT)/$(*D)
-	$(LEAN) $(LEAN_OPTS) -o "$@" --c="$(TEMP_OUT)/$*.c.tmp" $<
+	$(LEAN) $(LEAN_OPTS) -o "$@" -i "$(OLEAN_OUT)/$*.ilean" --c="$(TEMP_OUT)/$*.c.tmp" $<
 # create the .c file atomically
 	mv "$(TEMP_OUT)/$*.c.tmp" "$(TEMP_OUT)/$*.c"
+
+$(OLEAN_OUT)/%.ilean: $(OLEAN_OUT)/%.olean
+	@
 
 ifndef C_ONLY
 $(TEMP_OUT)/%.c: $(OLEAN_OUT)/%.olean
@@ -91,6 +100,10 @@ endif
 $(LIB_OUT)/$(STATIC_LIB_NAME): $(addprefix $(TEMP_OUT)/,$(SRCS:.lean=.o)) | $(LIB_OUT)
 	@rm -f $@
 	@$(LEAN_AR) rcs $@ $^
+
+$(OLEAN_OUT)/$(ILEAN_BUNDLE_NAME): $(addprefix $(OLEAN_OUT)/,$(SRCS:.lean=.ilean))
+	@rm -f $@
+	@$(LEANBUNDLE) $@ $^
 
 clean:
 	rm -rf $(OUT)

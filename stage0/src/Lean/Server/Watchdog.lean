@@ -13,6 +13,7 @@ import Lean.Elab.Import
 import Lean.Data.Lsp
 import Lean.Server.Utils
 import Lean.Server.Requests
+import Lean.Server.References
 
 /-!
 For general server architecture, see `README.md`. This module implements the watchdog process.
@@ -177,6 +178,8 @@ section ServerM
     initParams     : InitializeParams
     editDelay      : Nat
     workerPath     : System.FilePath
+    srcSearchPath  : System.SearchPath
+    references     : References
 
   abbrev ServerM := ReaderT ServerContext IO
 
@@ -513,6 +516,8 @@ section MainLoop
       | Message.notification method (some params) =>
         handleNotification method (toJson params)
         mainLoop (←runClientTask)
+      | Message.response "register_ilean_watcher" result =>
+        mainLoop (←runClientTask)
       | _ => throwServerError "Got invalid JSON-RPC message"
     | ServerEvent.clientError e => throw e
     | ServerEvent.workerEvent fw ev =>
@@ -574,12 +579,39 @@ def initAndRunWatchdogAux : ServerM Unit := do
     catch _ => pure (Message.notification "exit" none)
     | throwServerError "Got `shutdown` request, expected an `exit` notification"
 
-def initAndRunWatchdog (args : List String) (i o e : FS.Stream) : IO Unit := do
+def findWorkerPath : IO System.FilePath := do
   let mut workerPath ← IO.appPath
   if let some path := (←IO.getEnv "LEAN_SYSROOT") then
     workerPath := System.FilePath.mk path / "bin" / "lean" |>.withExtension System.FilePath.exeExtension
   if let some path := (←IO.getEnv "LEAN_WORKER_PATH") then
     workerPath := System.FilePath.mk path
+  workerPath
+
+-- TODO Combine with FileWorker.lean#compileHeader to deduplicate logic
+-- TODO Support lake projects (src and olean paths)
+def findSrcSearchPath : IO System.SearchPath := do
+  let srcPath := (← appDir) / ".." / "lib" / "lean" / "src"
+  -- `lake/` should come first since on case-insensitive file systems, Lean thinks that `src/` also contains `Lake/`
+  let mut srcSearchPath := [srcPath / "lake", srcPath]
+  if let some p := (← IO.getEnv "LEAN_SRC_PATH") then
+    srcSearchPath := System.SearchPath.parse p ++ srcSearchPath
+  srcSearchPath
+
+def loadReferences : IO References := do
+  let oleanSearchPath ← Lean.searchPathRef.get
+  let mut refs := References.empty
+  for path in ← oleanSearchPath.findAllWithExt "ilean-bundle" do
+    let content ← FS.readFile path
+    let bundle ← match Json.parse content >>= fromJson? with
+      | Except.ok bundle => pure bundle
+      | Except.error msg => throwServerError s!"Failed to load bundle at {path}: {msg}"
+    refs := refs.addBundle path bundle
+  refs
+
+def initAndRunWatchdog (args : List String) (i o e : FS.Stream) : IO Unit := do
+  let workerPath ← findWorkerPath
+  let srcSearchPath ← findSrcSearchPath
+  let references ← loadReferences
   let fileWorkersRef ← IO.mkRef (RBMap.empty : FileWorkerMap)
   let i ← maybeTee "wdIn.txt" false i
   let o ← maybeTee "wdOut.txt" true o
@@ -596,6 +628,19 @@ def initAndRunWatchdog (args : List String) (i o e : FS.Stream) : IO Unit := do
       : InitializeResult
     }
   }
+  o.writeLspRequest {
+    id := RequestID.str "register_ilean_watcher"
+    method := "client/registerCapability"
+    param := some {
+      registrations := #[ {
+        id := "ilean_watcher"
+        method := "workspace/didChangeWatchedFiles"
+        registerOptions := some <| toJson {
+          watchers := #[ { globPattern := "**/*.ilean-bundle" } ]
+        : DidChangeWatchedFilesRegistrationOptions }
+      } ]
+    : RegistrationParams }
+  }
   ReaderT.run initAndRunWatchdogAux {
     hIn            := i
     hOut           := o
@@ -604,7 +649,9 @@ def initAndRunWatchdog (args : List String) (i o e : FS.Stream) : IO Unit := do
     fileWorkersRef := fileWorkersRef
     initParams     := initRequest.param
     editDelay      := initRequest.param.initializationOptions? |>.bind InitializationOptions.editDelay? |>.getD 200
-    workerPath     := workerPath
+    workerPath
+    srcSearchPath
+    references
     : ServerContext
   }
 

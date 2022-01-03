@@ -17,6 +17,7 @@ static lean_object* l_Lean_modToFilePath_go___closed__2;
 lean_object* lean_string_push(lean_object*, uint32_t);
 LEAN_EXPORT lean_object* l_Lean_moduleNameOfFileName___lambda__2(lean_object*, lean_object*, lean_object*, lean_object*);
 static lean_object* l_Lean_modToFilePath_go___closed__4;
+size_t lean_usize_add(size_t, size_t);
 static lean_object* l_Lean_findOLean___closed__3;
 static lean_object* l_Lean_findSysroot_x3f___lambda__1___closed__3;
 static lean_object* l_Lean_modToFilePath_go___closed__1;
@@ -24,6 +25,7 @@ lean_object* lean_mk_empty_array_with_capacity(lean_object*);
 static lean_object* l_Lean_findSysroot_x3f___closed__1;
 lean_object* l_System_FilePath_join(lean_object*, lean_object*);
 lean_object* lean_name_mk_string(lean_object*, lean_object*);
+lean_object* lean_array_uget(lean_object*, size_t);
 LEAN_EXPORT lean_object* l_Lean_modToFilePath_go___boxed(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* lean_init_search_path(lean_object*);
 extern uint8_t l_System_FilePath_isCaseInsensitive;
@@ -35,10 +37,11 @@ lean_object* l_System_FilePath_components(lean_object*);
 LEAN_EXPORT lean_object* l_Lean_findSysroot_x3f___lambda__1(lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_getBuiltinSearchPath(lean_object*, lean_object*);
 lean_object* lean_array_push(lean_object*, lean_object*);
+lean_object* lean_array_get_size(lean_object*);
 lean_object* lean_string_append(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_modToFilePath_go(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_moduleNameOfFileName___lambda__3(lean_object*, lean_object*, lean_object*);
-static lean_object* l_Lean_findSysroot_x3f___lambda__1___closed__5;
+uint8_t lean_usize_dec_lt(size_t, size_t);
 static lean_object* l_Lean_moduleNameOfFileName___lambda__2___closed__1;
 LEAN_EXPORT lean_object* l_Lean_findOLean(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_modToFilePath___boxed(lean_object*, lean_object*, lean_object*);
@@ -48,11 +51,12 @@ static lean_object* l_Lean_findOLean_maybeThisOne___closed__2;
 lean_object* l_IO_appDir(lean_object*);
 static lean_object* l_Lean_getLibDir___closed__4;
 LEAN_EXPORT lean_object* l_Lean_findOLean_maybeThisOne___lambda__1(lean_object*, lean_object*, lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_Lean_SearchPath_findAllWithExt(lean_object*, lean_object*, lean_object*);
 static lean_object* l_Lean_getBuildDir___closed__3;
+lean_object* lean_io_read_dir(lean_object*, lean_object*);
 lean_object* lean_io_realpath(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_moduleNameOfFileName___lambda__1(lean_object*, lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_moduleNameOfFileName___lambda__1___boxed(lean_object*, lean_object*, lean_object*, lean_object*);
-static lean_object* l_Lean_moduleNameOfFileName___lambda__1___closed__1;
 lean_object* l_Lean_Name_toString(lean_object*, uint8_t);
 extern lean_object* l_System_instInhabitedFilePath;
 static lean_object* l_Lean_addSearchPathFromEnv___closed__1;
@@ -63,7 +67,7 @@ LEAN_EXPORT lean_object* l_Lean_findOLean___lambda__1(lean_object*, lean_object*
 lean_object* lean_st_mk_ref(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_List_findM_x3f___at_Lean_SearchPath_findWithExt___spec__1___boxed(lean_object*, lean_object*, lean_object*, lean_object*);
 lean_object* l_System_FilePath_normalize(lean_object*, uint8_t);
-LEAN_EXPORT lean_object* l_Lean_initFn____x40_Lean_Util_Path___hyg_192_(lean_object*);
+LEAN_EXPORT lean_object* l_Lean_initFn____x40_Lean_Util_Path___hyg_373_(lean_object*);
 uint8_t l_String_endsWith(lean_object*, lean_object*);
 static lean_object* l_Lean_findOLean___closed__2;
 LEAN_EXPORT lean_object* l_Lean_SearchPath_findWithExt(lean_object*, lean_object*, lean_object*, lean_object*);
@@ -74,9 +78,11 @@ lean_object* l___private_Init_Util_0__mkPanicMessageWithDecl(lean_object*, lean_
 LEAN_EXPORT lean_object* l_Lean_realPathNormalized(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* lean_get_prefix(lean_object*);
 static lean_object* l_Lean_moduleNameOfFileName___lambda__2___closed__3;
+size_t lean_usize_of_nat(lean_object*);
 static lean_object* l_Lean_findOLean___closed__4;
 lean_object* l_IO_Process_run(lean_object*, lean_object*);
 static lean_object* l_Lean_moduleNameOfFileName___lambda__3___closed__1;
+lean_object* l_IO_FS_DirEntry_path(lean_object*);
 LEAN_EXPORT lean_object* l_Lean_findOLean___lambda__1___boxed(lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_initSearchPath(lean_object*, lean_object*, lean_object*);
 static lean_object* l_Lean_findOLean___closed__1;
@@ -92,11 +98,14 @@ static lean_object* l_Lean_findOLean_maybeThisOne___closed__1;
 lean_object* l_System_FilePath_isDir(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_modToFilePath(lean_object*, lean_object*, lean_object*);
 lean_object* lean_st_ref_set(lean_object*, lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_Lean_SearchPath_findAllWithExt___boxed(lean_object*, lean_object*, lean_object*);
 static lean_object* l_Lean_findSysroot_x3f___lambda__1___closed__2;
+static lean_object* l_Lean_SearchPath_findAllWithExt___closed__1;
 LEAN_EXPORT uint8_t l___private_Lean_Util_Path_0__Lean_isStage0(lean_object*);
 lean_object* lean_panic_fn(lean_object*, lean_object*);
 lean_object* l_String_trim(lean_object*);
 static lean_object* l_Lean_moduleNameOfFileName___lambda__2___closed__2;
+LEAN_EXPORT lean_object* l_List_forIn_loop___at_Lean_SearchPath_findAllWithExt___spec__2___boxed(lean_object*, lean_object*, lean_object*, lean_object*);
 static lean_object* l_Lean_getBuildDir___closed__1;
 static lean_object* l_Lean_getLibDir___closed__3;
 lean_object* l_System_SearchPath_parse(lean_object*);
@@ -110,10 +119,15 @@ LEAN_EXPORT lean_object* l_List_findM_x3f___at_Lean_SearchPath_findWithExt___spe
 lean_object* l_Lean_Name_getRoot(lean_object*);
 static lean_object* l_Lean_findSysroot_x3f___lambda__1___closed__1;
 LEAN_EXPORT lean_object* l_Lean_findSysroot_x3f___lambda__1___boxed(lean_object*, lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_List_forIn_loop___at_Lean_SearchPath_findAllWithExt___spec__2(lean_object*, lean_object*, lean_object*, lean_object*);
+static lean_object* l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2;
 static lean_object* l_Lean_getBuildDir___closed__2;
 lean_object* l_List_appendTR___rarg(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1(lean_object*, lean_object*, size_t, size_t, lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___boxed(lean_object*, lean_object*, lean_object*, lean_object*, lean_object*, lean_object*);
 static lean_object* l_Lean_getLibDir___lambda__1___closed__2;
 static lean_object* l_Lean_getBuildDir___closed__4;
+static lean_object* l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__1;
 static lean_object* l_Lean_getLibDir___lambda__1___closed__1;
 LEAN_EXPORT lean_object* l_Lean_getLibDir___lambda__1___boxed(lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_Lean_realPathNormalized(lean_object* x_1, lean_object* x_2) {
@@ -508,7 +522,232 @@ lean_dec(x_2);
 return x_5;
 }
 }
-LEAN_EXPORT lean_object* l_Lean_initFn____x40_Lean_Util_Path___hyg_192_(lean_object* x_1) {
+static lean_object* _init_l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__1() {
+_start:
+{
+lean_object* x_1; 
+x_1 = lean_mk_string(".");
+return x_1;
+}
+}
+static lean_object* _init_l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2() {
+_start:
+{
+lean_object* x_1; 
+x_1 = lean_mk_string("");
+return x_1;
+}
+}
+LEAN_EXPORT lean_object* l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1(lean_object* x_1, lean_object* x_2, size_t x_3, size_t x_4, lean_object* x_5, lean_object* x_6) {
+_start:
+{
+uint8_t x_7; 
+x_7 = lean_usize_dec_lt(x_4, x_3);
+if (x_7 == 0)
+{
+lean_object* x_8; 
+x_8 = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(x_8, 0, x_5);
+lean_ctor_set(x_8, 1, x_6);
+return x_8;
+}
+else
+{
+lean_object* x_9; lean_object* x_10; lean_object* x_11; lean_object* x_12; lean_object* x_13; lean_object* x_14; uint8_t x_15; 
+x_9 = lean_array_uget(x_2, x_4);
+x_10 = lean_ctor_get(x_9, 1);
+lean_inc(x_10);
+x_11 = l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__1;
+x_12 = lean_string_append(x_11, x_1);
+x_13 = l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2;
+x_14 = lean_string_append(x_12, x_13);
+x_15 = l_String_endsWith(x_10, x_14);
+if (x_15 == 0)
+{
+size_t x_16; size_t x_17; 
+lean_dec(x_9);
+x_16 = 1;
+x_17 = lean_usize_add(x_4, x_16);
+x_4 = x_17;
+goto _start;
+}
+else
+{
+lean_object* x_19; lean_object* x_20; size_t x_21; size_t x_22; 
+x_19 = l_IO_FS_DirEntry_path(x_9);
+x_20 = lean_array_push(x_5, x_19);
+x_21 = 1;
+x_22 = lean_usize_add(x_4, x_21);
+x_4 = x_22;
+x_5 = x_20;
+goto _start;
+}
+}
+}
+}
+LEAN_EXPORT lean_object* l_List_forIn_loop___at_Lean_SearchPath_findAllWithExt___spec__2(lean_object* x_1, lean_object* x_2, lean_object* x_3, lean_object* x_4) {
+_start:
+{
+if (lean_obj_tag(x_2) == 0)
+{
+lean_object* x_5; 
+x_5 = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(x_5, 0, x_3);
+lean_ctor_set(x_5, 1, x_4);
+return x_5;
+}
+else
+{
+lean_object* x_6; lean_object* x_7; lean_object* x_8; 
+x_6 = lean_ctor_get(x_2, 0);
+x_7 = lean_ctor_get(x_2, 1);
+x_8 = lean_io_read_dir(x_6, x_4);
+if (lean_obj_tag(x_8) == 0)
+{
+lean_object* x_9; lean_object* x_10; lean_object* x_11; size_t x_12; size_t x_13; lean_object* x_14; lean_object* x_15; lean_object* x_16; 
+x_9 = lean_ctor_get(x_8, 0);
+lean_inc(x_9);
+x_10 = lean_ctor_get(x_8, 1);
+lean_inc(x_10);
+lean_dec(x_8);
+x_11 = lean_array_get_size(x_9);
+x_12 = lean_usize_of_nat(x_11);
+lean_dec(x_11);
+x_13 = 0;
+x_14 = l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1(x_1, x_9, x_12, x_13, x_3, x_10);
+lean_dec(x_9);
+x_15 = lean_ctor_get(x_14, 0);
+lean_inc(x_15);
+x_16 = lean_ctor_get(x_14, 1);
+lean_inc(x_16);
+lean_dec(x_14);
+x_2 = x_7;
+x_3 = x_15;
+x_4 = x_16;
+goto _start;
+}
+else
+{
+uint8_t x_18; 
+lean_dec(x_3);
+x_18 = !lean_is_exclusive(x_8);
+if (x_18 == 0)
+{
+return x_8;
+}
+else
+{
+lean_object* x_19; lean_object* x_20; lean_object* x_21; 
+x_19 = lean_ctor_get(x_8, 0);
+x_20 = lean_ctor_get(x_8, 1);
+lean_inc(x_20);
+lean_inc(x_19);
+lean_dec(x_8);
+x_21 = lean_alloc_ctor(1, 2, 0);
+lean_ctor_set(x_21, 0, x_19);
+lean_ctor_set(x_21, 1, x_20);
+return x_21;
+}
+}
+}
+}
+}
+static lean_object* _init_l_Lean_SearchPath_findAllWithExt___closed__1() {
+_start:
+{
+lean_object* x_1; lean_object* x_2; 
+x_1 = lean_unsigned_to_nat(0u);
+x_2 = lean_mk_empty_array_with_capacity(x_1);
+return x_2;
+}
+}
+LEAN_EXPORT lean_object* l_Lean_SearchPath_findAllWithExt(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
+_start:
+{
+lean_object* x_4; lean_object* x_5; 
+x_4 = l_Lean_SearchPath_findAllWithExt___closed__1;
+x_5 = l_List_forIn_loop___at_Lean_SearchPath_findAllWithExt___spec__2(x_2, x_1, x_4, x_3);
+if (lean_obj_tag(x_5) == 0)
+{
+uint8_t x_6; 
+x_6 = !lean_is_exclusive(x_5);
+if (x_6 == 0)
+{
+return x_5;
+}
+else
+{
+lean_object* x_7; lean_object* x_8; lean_object* x_9; 
+x_7 = lean_ctor_get(x_5, 0);
+x_8 = lean_ctor_get(x_5, 1);
+lean_inc(x_8);
+lean_inc(x_7);
+lean_dec(x_5);
+x_9 = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(x_9, 0, x_7);
+lean_ctor_set(x_9, 1, x_8);
+return x_9;
+}
+}
+else
+{
+uint8_t x_10; 
+x_10 = !lean_is_exclusive(x_5);
+if (x_10 == 0)
+{
+return x_5;
+}
+else
+{
+lean_object* x_11; lean_object* x_12; lean_object* x_13; 
+x_11 = lean_ctor_get(x_5, 0);
+x_12 = lean_ctor_get(x_5, 1);
+lean_inc(x_12);
+lean_inc(x_11);
+lean_dec(x_5);
+x_13 = lean_alloc_ctor(1, 2, 0);
+lean_ctor_set(x_13, 0, x_11);
+lean_ctor_set(x_13, 1, x_12);
+return x_13;
+}
+}
+}
+}
+LEAN_EXPORT lean_object* l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___boxed(lean_object* x_1, lean_object* x_2, lean_object* x_3, lean_object* x_4, lean_object* x_5, lean_object* x_6) {
+_start:
+{
+size_t x_7; size_t x_8; lean_object* x_9; 
+x_7 = lean_unbox_usize(x_3);
+lean_dec(x_3);
+x_8 = lean_unbox_usize(x_4);
+lean_dec(x_4);
+x_9 = l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1(x_1, x_2, x_7, x_8, x_5, x_6);
+lean_dec(x_2);
+lean_dec(x_1);
+return x_9;
+}
+}
+LEAN_EXPORT lean_object* l_List_forIn_loop___at_Lean_SearchPath_findAllWithExt___spec__2___boxed(lean_object* x_1, lean_object* x_2, lean_object* x_3, lean_object* x_4) {
+_start:
+{
+lean_object* x_5; 
+x_5 = l_List_forIn_loop___at_Lean_SearchPath_findAllWithExt___spec__2(x_1, x_2, x_3, x_4);
+lean_dec(x_2);
+lean_dec(x_1);
+return x_5;
+}
+}
+LEAN_EXPORT lean_object* l_Lean_SearchPath_findAllWithExt___boxed(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
+_start:
+{
+lean_object* x_4; 
+x_4 = l_Lean_SearchPath_findAllWithExt(x_1, x_2, x_3);
+lean_dec(x_2);
+lean_dec(x_1);
+return x_4;
+}
+}
+LEAN_EXPORT lean_object* l_Lean_initFn____x40_Lean_Util_Path___hyg_373_(lean_object* x_1) {
 _start:
 {
 lean_object* x_2; lean_object* x_3; uint8_t x_4; 
@@ -1325,21 +1564,13 @@ goto _start;
 }
 }
 }
-static lean_object* _init_l_Lean_moduleNameOfFileName___lambda__1___closed__1() {
-_start:
-{
-lean_object* x_1; 
-x_1 = lean_mk_string("");
-return x_1;
-}
-}
 LEAN_EXPORT lean_object* l_Lean_moduleNameOfFileName___lambda__1(lean_object* x_1, lean_object* x_2, lean_object* x_3, lean_object* x_4) {
 _start:
 {
 lean_object* x_5; lean_object* x_6; lean_object* x_7; lean_object* x_8; lean_object* x_9; lean_object* x_10; lean_object* x_11; lean_object* x_12; 
 x_5 = lean_string_length(x_1);
 x_6 = l_String_drop(x_2, x_5);
-x_7 = l_Lean_moduleNameOfFileName___lambda__1___closed__1;
+x_7 = l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2;
 x_8 = l_System_FilePath_withExtension(x_6, x_7);
 x_9 = l_System_FilePath_components(x_8);
 x_10 = lean_box(0);
@@ -1417,7 +1648,7 @@ static lean_object* _init_l_Lean_moduleNameOfFileName___lambda__3___closed__1() 
 _start:
 {
 lean_object* x_1; uint32_t x_2; lean_object* x_3; 
-x_1 = l_Lean_moduleNameOfFileName___lambda__1___closed__1;
+x_1 = l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2;
 x_2 = l_System_FilePath_pathSeparator;
 x_3 = lean_string_push(x_1, x_2);
 return x_3;
@@ -1620,15 +1851,6 @@ x_3 = lean_array_push(x_1, x_2);
 return x_3;
 }
 }
-static lean_object* _init_l_Lean_findSysroot_x3f___lambda__1___closed__5() {
-_start:
-{
-lean_object* x_1; lean_object* x_2; 
-x_1 = lean_unsigned_to_nat(0u);
-x_2 = lean_mk_empty_array_with_capacity(x_1);
-return x_2;
-}
-}
 LEAN_EXPORT lean_object* l_Lean_findSysroot_x3f___lambda__1(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
 _start:
 {
@@ -1636,7 +1858,7 @@ lean_object* x_4; lean_object* x_5; lean_object* x_6; lean_object* x_7; lean_obj
 x_4 = lean_box(0);
 x_5 = l_Lean_findSysroot_x3f___lambda__1___closed__1;
 x_6 = l_Lean_findSysroot_x3f___lambda__1___closed__4;
-x_7 = l_Lean_findSysroot_x3f___lambda__1___closed__5;
+x_7 = l_Lean_SearchPath_findAllWithExt___closed__1;
 x_8 = lean_alloc_ctor(0, 5, 0);
 lean_ctor_set(x_8, 0, x_5);
 lean_ctor_set(x_8, 1, x_1);
@@ -1786,7 +2008,13 @@ l_Lean_modToFilePath_go___closed__3 = _init_l_Lean_modToFilePath_go___closed__3(
 lean_mark_persistent(l_Lean_modToFilePath_go___closed__3);
 l_Lean_modToFilePath_go___closed__4 = _init_l_Lean_modToFilePath_go___closed__4();
 lean_mark_persistent(l_Lean_modToFilePath_go___closed__4);
-res = l_Lean_initFn____x40_Lean_Util_Path___hyg_192_(lean_io_mk_world());
+l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__1 = _init_l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__1();
+lean_mark_persistent(l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__1);
+l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2 = _init_l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2();
+lean_mark_persistent(l_Array_forInUnsafe_loop___at_Lean_SearchPath_findAllWithExt___spec__1___closed__2);
+l_Lean_SearchPath_findAllWithExt___closed__1 = _init_l_Lean_SearchPath_findAllWithExt___closed__1();
+lean_mark_persistent(l_Lean_SearchPath_findAllWithExt___closed__1);
+res = l_Lean_initFn____x40_Lean_Util_Path___hyg_373_(lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 l_Lean_searchPathRef = lean_io_result_get_value(res);
 lean_mark_persistent(l_Lean_searchPathRef);
@@ -1824,8 +2052,6 @@ l_Lean_findOLean___closed__3 = _init_l_Lean_findOLean___closed__3();
 lean_mark_persistent(l_Lean_findOLean___closed__3);
 l_Lean_findOLean___closed__4 = _init_l_Lean_findOLean___closed__4();
 lean_mark_persistent(l_Lean_findOLean___closed__4);
-l_Lean_moduleNameOfFileName___lambda__1___closed__1 = _init_l_Lean_moduleNameOfFileName___lambda__1___closed__1();
-lean_mark_persistent(l_Lean_moduleNameOfFileName___lambda__1___closed__1);
 l_Lean_moduleNameOfFileName___lambda__2___closed__1 = _init_l_Lean_moduleNameOfFileName___lambda__2___closed__1();
 lean_mark_persistent(l_Lean_moduleNameOfFileName___lambda__2___closed__1);
 l_Lean_moduleNameOfFileName___lambda__2___closed__2 = _init_l_Lean_moduleNameOfFileName___lambda__2___closed__2();
@@ -1842,8 +2068,6 @@ l_Lean_findSysroot_x3f___lambda__1___closed__3 = _init_l_Lean_findSysroot_x3f___
 lean_mark_persistent(l_Lean_findSysroot_x3f___lambda__1___closed__3);
 l_Lean_findSysroot_x3f___lambda__1___closed__4 = _init_l_Lean_findSysroot_x3f___lambda__1___closed__4();
 lean_mark_persistent(l_Lean_findSysroot_x3f___lambda__1___closed__4);
-l_Lean_findSysroot_x3f___lambda__1___closed__5 = _init_l_Lean_findSysroot_x3f___lambda__1___closed__5();
-lean_mark_persistent(l_Lean_findSysroot_x3f___lambda__1___closed__5);
 l_Lean_findSysroot_x3f___closed__1 = _init_l_Lean_findSysroot_x3f___closed__1();
 lean_mark_persistent(l_Lean_findSysroot_x3f___closed__1);
 return lean_io_result_mk_ok(lean_box(0));
