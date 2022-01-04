@@ -177,11 +177,11 @@ def findModuleRefs (text : FileMap) (trees : List InfoTree) (localVars : Bool :=
 structure References where
   bundles : HashMap System.FilePath Bundle
   /-- Replaces the corresponding modules in `bundles` -/
-  overlays : Bundle
+  overlays : HashMap Name (Nat × ModuleRefs)
 
 namespace References
 
-def empty : References := { bundles := HashMap.empty, overlays := Bundle.empty }
+def empty : References := { bundles := HashMap.empty, overlays := HashMap.empty }
 
 def addBundle (self : References) (path : System.FilePath) (bundle : IleanBundle) : References :=
   { self with bundles := self.bundles.insert path bundle.toBundle }
@@ -189,16 +189,23 @@ def addBundle (self : References) (path : System.FilePath) (bundle : IleanBundle
 def removeBundle (self : References) (path : System.FilePath) : References :=
   { self with bundles := self.bundles.erase path }
 
-def addOverlay (self : References) (module : Name) (map : ModuleRefs) : References :=
-  { self with overlays := self.overlays.addModule module map }
+def addOverlay (self : References) (module : Name) (version : Nat) (refs : ModuleRefs)
+    : References := Id.run do
+  if let some (oldVersion, _) := self.overlays.find? module then
+    if version <= oldVersion then
+      return self -- Trying to add an older version
+  return { self with overlays := self.overlays.insert module (version, refs) }
 
 def removeOverlay (self : References) (module : Name) : References :=
-  { self with overlays := self.overlays.removeModule module }
+  { self with overlays := self.overlays.erase module }
+
+def overlayBundle (self : References) : Bundle :=
+  self.overlays.toList.foldl (init := Bundle.empty) fun bundle (name, _, refs) => bundle.addModule name refs
 
 /-- All bundles and the overlay combined into a single bundle -/
 def bundle (self : References) : Bundle :=
   let base := self.bundles.toList.foldl (init := Bundle.empty) fun l (_, r) => l.addBundle r
-  base.addBundle self.overlays
+  base.addBundle self.overlayBundle
 
 def findAt? (self : References) (module : Name) (pos : Lsp.Position) : Option RefIdent := Id.run do
   if let some refs := self.bundle.find? module then
