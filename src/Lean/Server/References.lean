@@ -126,7 +126,7 @@ def identOf : Info → Option (RefIdent × Bool)
   | Info.ofFieldInfo fi => some (RefIdent.const fi.projName, false)
   | _ => none
 
-def findReferences (text : FileMap) (trees : List InfoTree) : Array Reference := Id.run do
+def findReferences (text : FileMap) (trees : Array InfoTree) : Array Reference := Id.run do
   let mut refs := #[]
   for tree in trees do
     refs := refs.appendList <| tree.deepestNodes fun _ info _ => Id.run do
@@ -173,7 +173,7 @@ def combineFvars (refs : Array Reference) : Array Reference := Id.run do
       | m, RefIdent.fvar id => RefIdent.fvar <| m.findD id id
       | _, ident => ident
 
-def findModuleRefs (text : FileMap) (trees : List InfoTree) (localVars : Bool := true)
+def findModuleRefs (text : FileMap) (trees : Array InfoTree) (localVars : Bool := true)
     : ModuleRefs := Id.run do
   let mut refs := combineFvars <| findReferences text trees
   if !localVars then
