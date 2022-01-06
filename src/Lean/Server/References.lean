@@ -46,9 +46,9 @@ def contains (self : RefInfo) (pos : Lsp.Position) : Bool := Id.run do
     if contains range pos then
       return true
   false
-  where
-    contains (range : Lsp.Range) (pos : Lsp.Position) : Bool :=
-      range.start <= pos && pos < range.end
+where
+  contains (range : Lsp.Range) (pos : Lsp.Position) : Bool :=
+    range.start <= pos && pos < range.end
 
 end Lean.Lsp.RefInfo
 
@@ -222,7 +222,7 @@ def findAt? (self : References) (module : Name) (pos : Lsp.Position) : Option Re
     return refs.findAt? pos
   none
 
-def referingTo (self : References) (ident : RefIdent) (srcSearchPath : SearchPath)
+def referringTo (self : References) (ident : RefIdent) (srcSearchPath : SearchPath)
     (includeDefinition : Bool := true) : IO (Array Location) := do
   let mut result := #[]
   for (module, refs) in self.bundle.toList do
