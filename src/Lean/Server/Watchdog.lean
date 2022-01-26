@@ -409,7 +409,7 @@ def handleCodeLens (p : CodeLensParams) : ServerM (Array CodeLens) := do
       let references ← (← read).references.get
       if let some refs := references.allRefs.find? module then
         return lineDefs refs |>.map fun (name, range) =>
-          { range, command? := none, data := CodeLensInfo.ref name : CodeLens }
+          { range, command? := none, data := CodeLensInfo.ref module name : CodeLens }
   #[]
 where
   lineDefs (refs : ModuleRefs) : Array (Name × Lsp.Range) := Id.run do
@@ -431,16 +431,21 @@ where
       if let some info := info then l.push info else l
 
 def handleCodeLensResolve (lens : CodeLens) : ServerM CodeLens := do
-  match lens.data with | CodeLensInfo.ref name => do
-    let references ← (← read).references.get
-    let count := references.countReferencesTo (RefIdent.const name) (includeDefinition := false)
-    let title := if count == 1 then s!"{count} reference" else s!"{count} references"
+  match lens.data with | CodeLensInfo.ref module name => do
     -- This needs to be implemented in the editor-specific lean plugins. The LSP
     -- spec says: "The protocol currently doesn’t specify a set of well-known
     -- commands." At least in VSCode, an empty command string makes the code
     -- lenses non-clickable.
     let command := ""
-    return { lens with command? := some { title, command } }
+    let references ← (← read).references.get
+    if let some refs := references.allRefs.find? module then
+      if let some ref := refs.find? (RefIdent.const name) then
+        if let some range := ref.definition then
+          let count := references.countReferencesTo (RefIdent.const name) (includeDefinition := false)
+          let title := if count == 1 then s!"{count} reference" else s!"{count} references"
+          let title := s!"{title} ({name})"
+          return { lens with range, command? := some { title, command } }
+    return { lens with command? := some { title := "error", command }}
 
 end RequestHandling
 

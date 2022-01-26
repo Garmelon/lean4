@@ -219,7 +219,7 @@ structure CodeLensParams where
   deriving FromJson, ToJson
 
 inductive CodeLensInfo where
-  | ref (name : Name)
+  | ref (module : Name) (name : Name)
   deriving FromJson, ToJson
 
 structure CodeLens where
