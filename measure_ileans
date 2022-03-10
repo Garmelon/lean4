@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import glob
+import json
 import shutil
 from pathlib import Path
 from subprocess import run
@@ -20,7 +20,23 @@ def main():
             continue
         lean_size = lean_file.stat().st_size
         ilean_size = ilean_file.stat().st_size
+        # with open(ilean_file) as f:
+        #     if json.load(f)["references"]:
+        #         continue
         print(f"{lean_size} {ilean_size}")
+        # if ilean_size < 1e2:
+        #     print()
+        #     print()
+        #     print(lean)
+        #     print(">"*80)
+        #     with open(lean_file) as f:
+        #         for line in f:
+        #             print(f"    {line.rstrip()}")
+        #     print("="*80)
+        #     with open(ilean_file) as f:
+        #         for line in f:
+        #             print(f"    {line.rstrip()}")
+        #     print("<"*80)
 
 if __name__ == "__main__":
     main()
