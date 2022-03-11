@@ -9,7 +9,7 @@ LEAN_PATH = Path("src")
 ILEAN_PATH = Path("build/release/stage1/lib/lean")
 
 def main():
-    print("x y")
+    print("x y refs")
 
     leans = [p.relative_to(LEAN_PATH) for p in LEAN_PATH.rglob("*.lean")]
     for lean in leans:
@@ -20,10 +20,11 @@ def main():
             continue
         lean_size = lean_file.stat().st_size
         ilean_size = ilean_file.stat().st_size
-        # with open(ilean_file) as f:
-        #     if json.load(f)["references"]:
-        #         continue
-        print(f"{lean_size} {ilean_size}")
+        with open(ilean_file) as f:
+            if json.load(f)["references"]:
+                print(f"{lean_size} {ilean_size} nonempty")
+            else:
+                print(f"{lean_size} {ilean_size} empty")
         # if ilean_size < 1e2:
         #     print()
         #     print()
