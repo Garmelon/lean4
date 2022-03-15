@@ -4,21 +4,50 @@ import json
 from collections import Counter
 from pathlib import Path
 
-ILEAN_PATH = Path("build/release/stage1/lib/lean")
+# ILEAN_PATH = Path("build/release/stage1/lib/lean")
+ILEAN_PATH = Path("build/release/stage2/lib/lean")
+MILLISECONDS = {
+        "Lean.Expr": 5,
+        "Option.some": 8,
+        "Array": 7,
+        "Option.none": 8,
+        "Lean.Name": 7,
+        "Nat": 7,
+        "Pure.pure": 7,
+        "Bool": 8,
+        "Bool.false": 7,
+        "Lean.Syntax": 4,
+        "Lean.Meta.MetaM": 4,
+        "Bool.true": 7,
+        "Option": 7,
+        "String": 5,
+        "List": 5,
+        "Unit": 6,
+        "Array.size": 5,
+        "Lean.Syntax.getOp": 3,
+        "Array.push": 5,
+        "Lean.Elab.Term.TermElabM": 3,
+}
 
 def main():
-    count = Counter()
+    occurrences = Counter()
+    files = Counter()
     for p in ILEAN_PATH.rglob("*.ilean"):
         with open(p) as f:
             ilean = json.load(f)
         for name, info in ilean["references"].items():
+            total = 0
             if info.get("definition", None):
-                count[name] += 1
-            count[name] += len(info["usages"])
+                total += 1
+            total += len(info["usages"])
+            occurrences[name] += total
+            if total > 0:
+                files[name] += 1
 
-    for name, amount in count.most_common(20):
+    for name, amount in occurrences.most_common(20):
         # print(f"{amount:4}: {name[2:]}")
-        print(f"\\lstinline!{name[2:]}! & {amount} & \\\\")
+        inlinename = f"\\lstinline!{name[2:]}!"
+        print(f"{inlinename:36} & {amount:4} & {files[name]:3} & {MILLISECONDS[name[2:]]} \\\\")
 
 if __name__ == "__main__":
     main()
