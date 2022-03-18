@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import re
+import json
+from subprocess import run
+
+def load_sizes(f):
+    sizes = {}
+    for line in f:
+        match = re.fullmatch(r"(\d+) build/release/stage1/lib/lean/(\S+)", line.strip())
+        size = int(match.group(1))
+        name = match.group(2)
+        sizes[name] = size
+    return sizes
+
+def load_load_times(f):
+    times = {}
+    for line in f:
+        if match := re.fullmatch(r"load /home/joscha-nixos/stud/lean/lean4/build/release/stage1/lib/lean/(\S+) (\d+(\.\d+)?)ms", line.strip()):
+            name = match.group(1)
+            time = float(match.group(2))
+            if name not in times:
+                times[name] = []
+            times[name].append(time)
+    return times
+
+def main():
+    run("fd -t f -e .ilean . build/release/stage1/lib/lean/ -x ls -l {} | awk '{ print $5, $9 }' > ilean_sizes.txt", shell=True)
+
+    with open("ilean_sizes.txt") as f:
+        sizes = load_sizes(f)
+
+    with open("ilean_load_times.txt") as f:
+        load_times = load_load_times(f)
+
+    print("x y refs")
+    for name in sorted(sizes.keys()):
+        size = sizes[name]
+        times = load_times[name]
+        # time = times[0]
+        time = sum(times) / len(times)
+
+        with open(f"build/release/stage1/lib/lean/{name}") as f:
+            empty = not json.load(f)["references"]
+
+        # if empty and time > 2e-2:
+        #     empty = True
+        #     print(name)
+        # else:
+        #     empty = False
+
+        if empty:
+            print(f"{size} {time} empty")
+        else:
+            print(f"{size} {time} nonempty")
+
+if __name__ == "__main__":
+	main()
